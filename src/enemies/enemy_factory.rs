@@ -46,13 +46,13 @@ pub mod EnemyFactoryMod {
         }
 
         pub fn draw(&mut self) {
-            self.update_position();
+            self.update();
             self.enemies.iter_mut().for_each(|e| {
                 e.draw();
             });
         }
 
-        fn update_position(&mut self) {
+        fn update(&mut self) {
             self.move_timer += get_frame_time();
 
             let change_direction = self.enemies.iter().any(|e| {
