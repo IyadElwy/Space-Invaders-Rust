@@ -16,21 +16,11 @@ pub mod EnemyMod {
 
     impl Enemy {
         pub fn create(figure_texture: Texture2D, x_position: f32, y_position: f32) -> Enemy {
-            Enemy {
-                figure_texture: figure_texture,
-                x_position,
-                y_position,
-                animation_state: true,
-            }
+            Enemy { figure_texture: figure_texture, x_position, y_position, animation_state: true }
         }
 
         pub fn draw(&mut self) {
-            let mut src_rect = Rect {
-                x: 0.,
-                y: 0.,
-                w: 15.,
-                h: 15.,
-            };
+            let mut src_rect = Rect { x: 0., y: 0., w: 15., h: 15. };
             if self.animation_state {
                 src_rect.x = 15.;
                 src_rect.w = 16.;
@@ -51,7 +41,7 @@ pub mod EnemyMod {
                 },
             );
         }
-        pub fn move_diagonal(&mut self, move_right: bool) {
+        pub fn move_horizontal(&mut self, move_right: bool) {
             if move_right {
                 self.x_position += 10.;
             } else {

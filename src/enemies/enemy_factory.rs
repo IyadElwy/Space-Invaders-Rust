@@ -73,7 +73,7 @@ pub mod EnemyFactoryMod {
                     }
                 } else {
                     for enemy in &mut self.enemies {
-                        enemy.move_diagonal(self.move_right);
+                        enemy.move_horizontal(self.move_right);
                         enemy.animation_state = !enemy.animation_state;
                     }
                 }
