@@ -1,6 +1,7 @@
 pub mod EnemyFactoryMod {
 
     use crate::enemies::enemy::EnemyMod::Enemy;
+    use crate::firing::Firing::FireBlast;
     use macroquad::color;
     use macroquad::experimental::animation;
     use macroquad::input;
@@ -30,19 +31,22 @@ pub mod EnemyFactoryMod {
             }
         }
 
-        pub fn create_wave(&mut self) {
-            let mut last_x_pos: f32 = 0.;
-            let mut last_y_pos: f32 = 0.;
-            self.enemies = (0..55)
-                .map(|i| {
-                    last_x_pos += 50.;
-                    if i % 11 == 0 {
-                        last_y_pos += 40.;
-                        last_x_pos = 0.;
-                    }
-                    Enemy::create(self.figure_texture.weak_clone(), last_x_pos, last_y_pos)
-                })
-                .collect();
+        pub fn create_wave(&mut self, level: &mut u8) {
+            if self.enemies.len() == 0 {
+                *level = *level + 1;
+                let mut last_x_pos: f32 = 0.;
+                let mut last_y_pos: f32 = 0.;
+                self.enemies = (0..55)
+                    .map(|i| {
+                        last_x_pos += 50.;
+                        if i % 11 == 0 {
+                            last_y_pos += 40.;
+                            last_x_pos = 0.;
+                        }
+                        Enemy::create(self.figure_texture.weak_clone(), last_x_pos, last_y_pos)
+                    })
+                    .collect();
+            }
         }
 
         pub fn draw(&mut self) {
@@ -77,7 +81,28 @@ pub mod EnemyFactoryMod {
                         enemy.animation_state = !enemy.animation_state;
                     }
                 }
+                self.enemies = self.enemies.drain(..).filter(|e| e.is_alive).collect();
                 self.move_timer = 0.0;
+            }
+        }
+
+        pub fn detect_enemy_collision(
+            &mut self,
+            fire_blasts: &mut Vec<FireBlast>,
+            score: &mut u32,
+        ) {
+            for b in fire_blasts.iter_mut() {
+                for (i, e) in self.enemies.iter_mut().enumerate() {
+                    if b.x_position < e.x_position + e.width + 20.
+                        && b.x_position + b.width > e.x_position
+                        && b.y_position < e.y_position + e.height
+                        && b.y_position + b.height > e.y_position
+                    {
+                        *score = *score + 10;
+                        e.kill();
+                        b.deactivate();
+                    }
+                }
             }
         }
     }

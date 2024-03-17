@@ -12,7 +12,7 @@ pub mod ShipMod {
         figure_texture: Texture2D,
         x_position: f32,
         firing_limit: usize,
-        active_fire_blasts: Vec<FireBlast>,
+        pub active_fire_blasts: Vec<FireBlast>,
     }
 
     impl Ship {
@@ -35,12 +35,7 @@ pub mod ShipMod {
                 color::GREEN,
                 DrawTextureParams {
                     dest_size: Some(Vec2 { x: 50., y: 50. }),
-                    source: Some(Rect {
-                        x: 68.,
-                        y: 0.,
-                        w: 15.,
-                        h: 15.,
-                    }),
+                    source: Some(Rect { x: 68., y: 0., w: 15., h: 15. }),
                     ..Default::default()
                 },
             );

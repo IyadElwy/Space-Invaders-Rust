@@ -11,22 +11,39 @@ pub mod EnemyMod {
         figure_texture: Texture2D,
         pub x_position: f32,
         pub y_position: f32,
+        pub width: f32,
+        pub height: f32,
         pub animation_state: bool,
+        pub is_alive: bool,
     }
 
     impl Enemy {
         pub fn create(figure_texture: Texture2D, x_position: f32, y_position: f32) -> Enemy {
-            Enemy { figure_texture: figure_texture, x_position, y_position, animation_state: true }
+            Enemy {
+                figure_texture: figure_texture,
+                x_position,
+                y_position,
+                width: 15.,
+                height: 15.,
+                animation_state: true,
+                is_alive: true,
+            }
         }
 
         pub fn draw(&mut self) {
-            let mut src_rect = Rect { x: 0., y: 0., w: 15., h: 15. };
+            let mut src_rect = Rect { x: 0., y: 0., w: self.width, h: self.height };
             if self.animation_state {
                 src_rect.x = 15.;
                 src_rect.w = 16.;
             } else {
                 src_rect.x = 0.;
                 src_rect.w = 15.;
+            }
+
+            if !self.is_alive {
+                src_rect.x = 30.;
+                src_rect.y = 50.;
+                src_rect.w = 18.;
             }
 
             draw_texture_ex(
@@ -50,6 +67,10 @@ pub mod EnemyMod {
         }
         pub fn move_down(&mut self) {
             self.y_position += 40.;
+        }
+
+        pub fn kill(&mut self) {
+            self.is_alive = false;
         }
     }
 }
