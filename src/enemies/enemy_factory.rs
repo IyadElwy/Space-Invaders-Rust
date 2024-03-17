@@ -42,21 +42,43 @@ pub mod EnemyFactoryMod {
 
                 let mut last_x_pos: f32 = 0.;
                 let mut last_y_pos: f32 = 0.;
-                self.enemies = (0..55)
-                    .map(|i| {
+                let mut enemies: Vec<Enemy> = Vec::with_capacity(55);
+                for (enemy_type_nr, enemy_count) in curr_level.types.iter() {
+                    let enemy_type_nr = enemy_type_nr.as_str();
+                    let enemy_count = enemy_count.parse::<i32>().unwrap();
+                    (0..enemy_count).into_iter().for_each(|i| {
                         last_x_pos += 50.;
-                        if i % 11 == 0 {
+                        if ((enemies.len() as i32) + i) % 11 == 0 {
                             last_y_pos += 40.;
                             last_x_pos = 0.;
                         }
-                        Enemy::create(
+                        enemies.push(Enemy::create(
                             self.figure_texture.weak_clone(),
-                            EnemyType::Type1,
+                            enemy_type_nr,
                             last_x_pos,
                             last_y_pos,
-                        )
-                    })
-                    .collect();
+                        ));
+                    });
+                }
+                self.enemies = enemies;
+
+                // let mut last_x_pos: f32 = 0.;
+                // let mut last_y_pos: f32 = 0.;
+                // self.enemies = (0..55)
+                //     .map(|i| {
+                //         last_x_pos += 50.;
+                //         if i % 11 == 0 {
+                //             last_y_pos += 40.;
+                //             last_x_pos = 0.;
+                //         }
+                //         Enemy::create(
+                //             self.figure_texture.weak_clone(),
+                //             EnemyType::Type1,
+                //             last_x_pos,
+                //             last_y_pos,
+                //         )
+                //     })
+                //     .collect();
             }
         }
 
@@ -102,8 +124,9 @@ pub mod EnemyFactoryMod {
             fire_blasts: &mut Vec<FireBlast>,
             score: &mut u32,
         ) {
+            let len_enemies = self.enemies.len();
             for b in fire_blasts.iter_mut() {
-                for (i, e) in self.enemies.iter_mut().enumerate() {
+                for e in self.enemies.iter_mut() {
                     if b.x_position < e.x_position + e.width + 23.
                         && b.x_position + b.width > e.x_position
                         && b.y_position < e.y_position + e.height
@@ -112,6 +135,9 @@ pub mod EnemyFactoryMod {
                         *score = *score + 10;
                         e.kill();
                         b.deactivate();
+                        if (len_enemies as f32) >= 0.5 && len_enemies % 11 == 0 {
+                            self.move_interval -= 0.4;
+                        }
                     }
                 }
             }

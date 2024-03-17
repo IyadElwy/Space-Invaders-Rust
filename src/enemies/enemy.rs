@@ -29,10 +29,18 @@ pub mod EnemyMod {
     impl Enemy {
         pub fn create(
             figure_texture: Texture2D,
-            enemy_type: EnemyType,
+            enemy_type_nr: &str,
             x_position: f32,
             y_position: f32,
         ) -> Enemy {
+            let enemy_type: EnemyType = match enemy_type_nr {
+                "1" => EnemyType::Type1,
+                "2" => EnemyType::Type2,
+                "3" => EnemyType::Type3,
+                "4" => EnemyType::Type4,
+                "5" => EnemyType::Type5,
+                _ => panic!("Unkown type"),
+            };
             Enemy {
                 figure_texture: figure_texture,
                 enemy_type,
@@ -47,6 +55,14 @@ pub mod EnemyMod {
 
         pub fn draw(&mut self) {
             let mut src_rect = Rect { x: 0., y: 0., w: self.width, h: self.height };
+            src_rect.y = match self.enemy_type {
+                EnemyType::Type1 => 0.,
+                EnemyType::Type2 => 16.,
+                EnemyType::Type3 => 32.,
+                EnemyType::Type4 => 48.,
+                EnemyType::Type5 => 64.,
+            };
+
             if self.animation_state {
                 src_rect.x = 15.;
                 src_rect.w = 16.;

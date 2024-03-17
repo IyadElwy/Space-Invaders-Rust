@@ -14,7 +14,7 @@ pub mod LoadLevelSettings {
 
     #[derive(Debug, Deserialize)]
     pub struct LevelData {
-        pub types: Vec<HashMap<String, String>>,
+        pub types: HashMap<String, String>,
         pub speed: String,
     }
 
