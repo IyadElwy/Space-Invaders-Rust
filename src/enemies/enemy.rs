@@ -7,8 +7,17 @@ pub mod EnemyMod {
     use macroquad::texture::*;
     use macroquad::window::*;
 
+    pub enum EnemyType {
+        Type1,
+        Type2,
+        Type3,
+        Type4,
+        Type5,
+    }
+
     pub struct Enemy {
         figure_texture: Texture2D,
+        enemy_type: EnemyType,
         pub x_position: f32,
         pub y_position: f32,
         pub width: f32,
@@ -18,9 +27,15 @@ pub mod EnemyMod {
     }
 
     impl Enemy {
-        pub fn create(figure_texture: Texture2D, x_position: f32, y_position: f32) -> Enemy {
+        pub fn create(
+            figure_texture: Texture2D,
+            enemy_type: EnemyType,
+            x_position: f32,
+            y_position: f32,
+        ) -> Enemy {
             Enemy {
                 figure_texture: figure_texture,
+                enemy_type,
                 x_position,
                 y_position,
                 width: 15.,

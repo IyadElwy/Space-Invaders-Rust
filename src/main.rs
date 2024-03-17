@@ -14,10 +14,13 @@ use ship::ShipMod::Ship;
 mod enemies;
 mod firing;
 use enemies::enemy_factory::EnemyFactoryMod::EnemyFactory;
+mod load_level_settings;
+use load_level_settings::LoadLevelSettings::{read_settings, LevelData};
 
 #[macroquad::main("Space Invaders")]
 async fn main() {
     window::set_window_size(640, 680);
+    let level_data = read_settings();
     let texture: Texture2D = load_texture("assets/SpaceInvaders.png").await.unwrap();
     let mut ship = Ship::create(texture.weak_clone(), 3);
     let mut enemy_factory: EnemyFactory = EnemyFactory::create(texture.weak_clone());
@@ -57,7 +60,7 @@ async fn main() {
             ship.fire();
         }
 
-        enemy_factory.create_wave(&mut level);
+        enemy_factory.create_wave(&mut level, &level_data);
         ship.draw();
         enemy_factory.draw();
         enemy_factory.detect_enemy_collision(&mut ship.active_fire_blasts, &mut score);

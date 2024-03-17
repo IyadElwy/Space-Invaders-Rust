@@ -1,7 +1,9 @@
 pub mod EnemyFactoryMod {
 
     use crate::enemies::enemy::EnemyMod::Enemy;
+    use crate::enemies::enemy::EnemyMod::EnemyType;
     use crate::firing::Firing::FireBlast;
+    use crate::load_level_settings::LoadLevelSettings::LevelData;
     use macroquad::color;
     use macroquad::experimental::animation;
     use macroquad::input;
@@ -11,6 +13,7 @@ pub mod EnemyFactoryMod {
     use macroquad::texture::*;
     use macroquad::time::get_frame_time;
     use macroquad::window::*;
+    use std::collections::HashMap;
 
     pub struct EnemyFactory {
         figure_texture: Texture2D,
@@ -26,14 +29,17 @@ pub mod EnemyFactoryMod {
                 figure_texture,
                 enemies: Vec::new(),
                 move_timer: 0.0,
-                move_interval: 1.2,
+                move_interval: 1.5,
                 move_right: true,
             }
         }
 
-        pub fn create_wave(&mut self, level: &mut u8) {
+        pub fn create_wave(&mut self, level: &mut u8, level_data: &HashMap<String, LevelData>) {
             if self.enemies.len() == 0 {
                 *level = *level + 1;
+                let curr_level: &LevelData = level_data.get(&level.to_string()).unwrap();
+                self.move_interval = curr_level.speed.parse::<f32>().unwrap();
+
                 let mut last_x_pos: f32 = 0.;
                 let mut last_y_pos: f32 = 0.;
                 self.enemies = (0..55)
@@ -43,7 +49,12 @@ pub mod EnemyFactoryMod {
                             last_y_pos += 40.;
                             last_x_pos = 0.;
                         }
-                        Enemy::create(self.figure_texture.weak_clone(), last_x_pos, last_y_pos)
+                        Enemy::create(
+                            self.figure_texture.weak_clone(),
+                            EnemyType::Type1,
+                            last_x_pos,
+                            last_y_pos,
+                        )
                     })
                     .collect();
             }
@@ -93,7 +104,7 @@ pub mod EnemyFactoryMod {
         ) {
             for b in fire_blasts.iter_mut() {
                 for (i, e) in self.enemies.iter_mut().enumerate() {
-                    if b.x_position < e.x_position + e.width + 20.
+                    if b.x_position < e.x_position + e.width + 23.
                         && b.x_position + b.width > e.x_position
                         && b.y_position < e.y_position + e.height
                         && b.y_position + b.height > e.y_position
