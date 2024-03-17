@@ -61,24 +61,6 @@ pub mod EnemyFactoryMod {
                     });
                 }
                 self.enemies = enemies;
-
-                // let mut last_x_pos: f32 = 0.;
-                // let mut last_y_pos: f32 = 0.;
-                // self.enemies = (0..55)
-                //     .map(|i| {
-                //         last_x_pos += 50.;
-                //         if i % 11 == 0 {
-                //             last_y_pos += 40.;
-                //             last_x_pos = 0.;
-                //         }
-                //         Enemy::create(
-                //             self.figure_texture.weak_clone(),
-                //             EnemyType::Type1,
-                //             last_x_pos,
-                //             last_y_pos,
-                //         )
-                //     })
-                //     .collect();
             }
         }
 
@@ -135,7 +117,7 @@ pub mod EnemyFactoryMod {
                         *score = *score + 10;
                         e.kill();
                         b.deactivate();
-                        if (len_enemies as f32) >= 0.5 && len_enemies % 11 == 0 {
+                        if len_enemies == 5 && self.move_interval >= 0.8 {
                             self.move_interval -= 0.4;
                         }
                     }
