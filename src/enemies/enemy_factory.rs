@@ -13,6 +13,7 @@ pub mod EnemyFactoryMod {
     use macroquad::texture::*;
     use macroquad::time::get_frame_time;
     use macroquad::window::*;
+    use rand::Rng;
     use std::collections::HashMap;
 
     pub struct EnemyFactory {
@@ -21,23 +22,31 @@ pub mod EnemyFactoryMod {
         move_timer: f32,
         move_interval: f32,
         move_right: bool,
+        level_data: HashMap<String, LevelData>,
+        cur_level: u8,
     }
 
     impl EnemyFactory {
-        pub fn create(figure_texture: Texture2D) -> EnemyFactory {
+        pub fn create(
+            figure_texture: Texture2D,
+            level_data: HashMap<String, LevelData>,
+        ) -> EnemyFactory {
             EnemyFactory {
                 figure_texture,
                 enemies: Vec::new(),
                 move_timer: 0.0,
                 move_interval: 1.5,
                 move_right: true,
+                level_data,
+                cur_level: 0,
             }
         }
 
-        pub fn create_wave(&mut self, level: &mut u8, level_data: &HashMap<String, LevelData>) {
+        pub fn create_wave(&mut self, level: &mut u8) {
             if self.enemies.len() == 0 {
                 *level = *level + 1;
-                let curr_level: &LevelData = level_data.get(&level.to_string()).unwrap();
+                self.cur_level = *level;
+                let curr_level: &LevelData = self.level_data.get(&level.to_string()).unwrap();
                 self.move_interval = curr_level.speed.parse::<f32>().unwrap();
 
                 let mut last_x_pos: f32 = 0.;
@@ -97,25 +106,41 @@ pub mod EnemyFactoryMod {
                     }
                 }
                 self.enemies = self.enemies.drain(..).filter(|e| e.is_alive).collect();
+
+                let curr_level: &LevelData =
+                    self.level_data.get(&self.cur_level.to_string()).unwrap();
+                let number_of_fires = curr_level.fires.parse::<i32>().unwrap();
+                if self.enemies.len() > 0 {
+                    let mut rng = rand::thread_rng();
+                    (0..number_of_fires).into_iter().for_each(|_| {
+                        let firing_enemy_index = rng.gen_range(0..self.enemies.len());
+                        self.enemies.get_mut(firing_enemy_index).unwrap().fire();
+                    });
+                }
                 self.move_timer = 0.0;
             }
         }
 
         pub fn detect_enemy_collision(
             &mut self,
-            fire_blasts: &mut Vec<FireBlast>,
+            incoming_fire_blasts: &mut Vec<FireBlast>,
             score: &mut u32,
         ) {
             let len_enemies = self.enemies.len();
-            for b in fire_blasts.iter_mut() {
+            for b in incoming_fire_blasts.iter_mut() {
                 for e in self.enemies.iter_mut() {
                     if b.x_position < e.x_position + e.width + 23.
                         && b.x_position + b.width > e.x_position
                         && b.y_position < e.y_position + e.height
                         && b.y_position + b.height > e.y_position
                     {
-                        *score = *score + 10;
-                        e.kill();
+                        *score = *score + e.hit_score;
+                        if e.cur_health >= 1 {
+                            e.cur_health -= 1;
+                        }
+                        if e.cur_health == 0 {
+                            e.kill();
+                        }
                         b.deactivate();
                         if len_enemies == 5 && self.move_interval >= 0.8 {
                             self.move_interval -= 0.4;

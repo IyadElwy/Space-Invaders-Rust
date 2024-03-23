@@ -23,7 +23,7 @@ async fn main() {
     let level_data = read_settings();
     let texture: Texture2D = load_texture("assets/SpaceInvaders.png").await.unwrap();
     let mut ship = Ship::create(texture.weak_clone(), 3);
-    let mut enemy_factory: EnemyFactory = EnemyFactory::create(texture.weak_clone());
+    let mut enemy_factory: EnemyFactory = EnemyFactory::create(texture.weak_clone(), level_data);
     let mut level: u8 = 0;
     let mut score: u32 = 0;
     let mut lives: u8 = 3;
@@ -60,7 +60,7 @@ async fn main() {
             ship.fire();
         }
 
-        enemy_factory.create_wave(&mut level, &level_data);
+        enemy_factory.create_wave(&mut level);
         ship.draw();
         enemy_factory.draw();
         enemy_factory.detect_enemy_collision(&mut ship.active_fire_blasts, &mut score);

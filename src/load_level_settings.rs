@@ -16,6 +16,7 @@ pub mod LoadLevelSettings {
     pub struct LevelData {
         pub types: HashMap<String, String>,
         pub speed: String,
+        pub fires: String,
     }
 
     pub fn read_settings() -> HashMap<String, LevelData> {
