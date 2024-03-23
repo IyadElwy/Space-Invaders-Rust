@@ -1,8 +1,8 @@
-pub mod EnemyFactoryMod {
+pub mod enemy_factory_mod {
 
-    use crate::enemies::enemy::EnemyMod::Enemy;
-    use crate::firing::Firing::FireBlast;
-    use crate::load_level_settings::LoadLevelSettings::LevelData;
+    use crate::enemies::enemy::enemy_mod::Enemy;
+    use crate::firing::firing::FireBlast;
+    use crate::load_level_settings::load_level_settings::LevelData;
     use macroquad::math::*;
     use macroquad::texture::*;
     use macroquad::time::get_frame_time;

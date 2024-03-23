@@ -1,5 +1,5 @@
-pub mod EnemyMod {
-    use crate::enemies::firing::Firing::FireBlast;
+pub mod enemy_mod {
+    use crate::enemies::firing::firing::FireBlast;
     use macroquad::color;
     use macroquad::math::*;
     use macroquad::texture::*;

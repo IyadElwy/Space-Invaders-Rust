@@ -1,6 +1,6 @@
-pub mod ShipMod {
-    use crate::enemies::enemy::EnemyMod::Enemy;
-    use crate::firing::Firing::FireBlast;
+pub mod ship_mod {
+    use crate::enemies::enemy::enemy_mod::Enemy;
+    use crate::firing::firing::FireBlast;
     use macroquad::color;
     use macroquad::math::*;
     use macroquad::texture::*;

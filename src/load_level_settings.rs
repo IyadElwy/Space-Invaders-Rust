@@ -1,4 +1,4 @@
-pub mod LoadLevelSettings {
+pub mod load_level_settings {
     use serde::Deserialize;
     use std::collections::HashMap;
     use std::fs::File;

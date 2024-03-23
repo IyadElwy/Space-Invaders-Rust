@@ -6,12 +6,12 @@ use macroquad::text;
 use macroquad::texture::*;
 use macroquad::window::*;
 mod ship;
-use ship::ShipMod::Ship;
+use ship::ship_mod::Ship;
 mod enemies;
 mod firing;
-use enemies::enemy_factory::EnemyFactoryMod::EnemyFactory;
+use enemies::enemy_factory::enemy_factory_mod::EnemyFactory;
 mod load_level_settings;
-use load_level_settings::LoadLevelSettings::read_settings;
+use load_level_settings::load_level_settings::read_settings;
 
 #[macroquad::main("Space Invaders")]
 async fn main() {

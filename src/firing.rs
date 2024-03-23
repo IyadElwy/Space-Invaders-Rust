@@ -1,4 +1,4 @@
-pub mod Firing {
+pub mod firing {
     use macroquad::color;
     use macroquad::math::*;
     use macroquad::texture::*;
