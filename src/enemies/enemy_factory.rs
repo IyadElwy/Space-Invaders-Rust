@@ -1,24 +1,17 @@
 pub mod EnemyFactoryMod {
 
     use crate::enemies::enemy::EnemyMod::Enemy;
-    use crate::enemies::enemy::EnemyMod::EnemyType;
     use crate::firing::Firing::FireBlast;
     use crate::load_level_settings::LoadLevelSettings::LevelData;
-    use macroquad::color;
-    use macroquad::experimental::animation;
-    use macroquad::input;
     use macroquad::math::*;
-    use macroquad::shapes;
-    use macroquad::text;
     use macroquad::texture::*;
     use macroquad::time::get_frame_time;
-    use macroquad::window::*;
     use rand::Rng;
     use std::collections::HashMap;
 
     pub struct EnemyFactory {
         figure_texture: Texture2D,
-        enemies: Vec<Enemy>,
+        pub enemies: Vec<Enemy>,
         move_timer: f32,
         move_interval: f32,
         move_right: bool,
@@ -42,8 +35,8 @@ pub mod EnemyFactoryMod {
             }
         }
 
-        pub fn create_wave(&mut self, level: &mut u8) {
-            if self.enemies.len() == 0 {
+        pub fn create_wave(&mut self, level: &mut u8, restart: bool) {
+            if self.enemies.len() == 0 || restart {
                 *level = *level + 1;
                 self.cur_level = *level;
                 let curr_level: &LevelData = self.level_data.get(&level.to_string()).unwrap();

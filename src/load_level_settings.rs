@@ -1,11 +1,8 @@
 pub mod LoadLevelSettings {
     use serde::Deserialize;
-    use serde_json::{Map, Number};
     use std::collections::HashMap;
-    use std::error::Error;
     use std::fs::File;
     use std::io::BufReader;
-    use std::path::Path;
 
     #[derive(Debug, Deserialize)]
     pub struct LevelSettings {

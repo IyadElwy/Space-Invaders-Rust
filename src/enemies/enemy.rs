@@ -1,12 +1,8 @@
 pub mod EnemyMod {
     use crate::enemies::firing::Firing::FireBlast;
     use macroquad::color;
-    use macroquad::input;
     use macroquad::math::*;
-    use macroquad::shapes;
-    use macroquad::text;
     use macroquad::texture::*;
-    use macroquad::window::*;
 
     pub enum EnemyType {
         Type1(u8, u32),

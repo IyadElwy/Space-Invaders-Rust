@@ -1,10 +1,8 @@
 pub mod ShipMod {
+    use crate::enemies::enemy::EnemyMod::Enemy;
     use crate::firing::Firing::FireBlast;
     use macroquad::color;
-    use macroquad::input;
     use macroquad::math::*;
-    use macroquad::shapes;
-    use macroquad::text;
     use macroquad::texture::*;
     use macroquad::window::*;
 
@@ -69,6 +67,21 @@ pub mod ShipMod {
                 }
             }
             self.active_fire_blasts = new_active_fire_blasts;
+        }
+
+        pub fn detect_enemy_collision(&mut self, enemies: &mut Vec<Enemy>, lives: &mut u8) {
+            for e in enemies.iter_mut() {
+                for b in e.active_fire_blasts.iter_mut() {
+                    if b.x_position < self.x_position + 15. + 23.
+                        && b.x_position + b.width > self.x_position
+                        && b.y_position < screen_height()
+                        && b.y_position + b.height > screen_height() - 50.
+                    {
+                        *lives -= 1;
+                        b.deactivate();
+                    }
+                }
+            }
         }
     }
 }

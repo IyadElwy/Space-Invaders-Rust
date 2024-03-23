@@ -1,21 +1,17 @@
-use enemies::enemy_factory;
 use macroquad::color;
-use macroquad::color::Color;
 use macroquad::input;
 use macroquad::math::*;
 use macroquad::miniquad::window;
-use macroquad::shapes;
 use macroquad::text;
 use macroquad::texture::*;
 use macroquad::window::*;
-use std::io::empty;
 mod ship;
 use ship::ShipMod::Ship;
 mod enemies;
 mod firing;
 use enemies::enemy_factory::EnemyFactoryMod::EnemyFactory;
 mod load_level_settings;
-use load_level_settings::LoadLevelSettings::{read_settings, LevelData};
+use load_level_settings::LoadLevelSettings::read_settings;
 
 #[macroquad::main("Space Invaders")]
 async fn main() {
@@ -60,10 +56,18 @@ async fn main() {
             ship.fire();
         }
 
-        enemy_factory.create_wave(&mut level);
+        enemy_factory.create_wave(&mut level, false);
         ship.draw();
         enemy_factory.draw();
         enemy_factory.detect_enemy_collision(&mut ship.active_fire_blasts, &mut score);
+        ship.detect_enemy_collision(&mut enemy_factory.enemies, &mut lives);
+
+        if lives <= 0 {
+            level = 0;
+            score = 0;
+            lives = 3;
+            enemy_factory.create_wave(&mut level, true);
+        }
         next_frame().await;
     }
 }

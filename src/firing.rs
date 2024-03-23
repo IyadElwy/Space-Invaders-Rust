@@ -1,11 +1,7 @@
 pub mod Firing {
     use macroquad::color;
-    use macroquad::input;
     use macroquad::math::*;
-    use macroquad::shapes;
-    use macroquad::text;
     use macroquad::texture::*;
-    use macroquad::window::*;
 
     pub struct FireBlast {
         texture: Texture2D,
