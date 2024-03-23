@@ -107,10 +107,10 @@ pub mod EnemyFactoryMod {
                 }
                 self.enemies = self.enemies.drain(..).filter(|e| e.is_alive).collect();
 
-                let curr_level: &LevelData =
-                    self.level_data.get(&self.cur_level.to_string()).unwrap();
-                let number_of_fires = curr_level.fires.parse::<i32>().unwrap();
                 if self.enemies.len() > 0 {
+                    let curr_level: &LevelData =
+                        self.level_data.get(&self.cur_level.to_string()).unwrap();
+                    let number_of_fires = curr_level.fires.parse::<i32>().unwrap();
                     let mut rng = rand::thread_rng();
                     (0..number_of_fires).into_iter().for_each(|_| {
                         let firing_enemy_index = rng.gen_range(0..self.enemies.len());
