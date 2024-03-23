@@ -62,7 +62,7 @@ async fn main() {
         enemy_factory.detect_enemy_collision(&mut ship.active_fire_blasts, &mut score);
         ship.detect_enemy_collision(&mut enemy_factory.enemies, &mut lives);
 
-        if lives <= 0 {
+        if lives <= 0 || level > 11 {
             level = 0;
             score = 0;
             lives = 3;
